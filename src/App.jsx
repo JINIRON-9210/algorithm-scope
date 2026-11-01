@@ -1,29 +1,35 @@
-import { useState } from 'react'
-import Visualizer from './components/Visualizer'
-import { bubbleSort } from './algorithms/bubbleSort'
+import { useEffect, useState } from 'react'
+import Home from './pages/Home'
+import AlgorithmPage from './pages/AlgorithmPage'
 
-const randomArray = (n = 12) =>
-  Array.from({ length: n }, () => Math.floor(Math.random() * 90) + 10)
+const getRoute = () => window.location.hash.replace(/^#\/?/, '')
 
 function App() {
-  const [input, setInput] = useState(() => randomArray())
-  const [seed, setSeed] = useState(0)
+  const [route, setRoute] = useState(getRoute)
 
-  const shuffle = () => {
-    setInput(randomArray())
-    setSeed((s) => s + 1)
-  }
+  useEffect(() => {
+    const onChange = () => {
+      setRoute(getRoute())
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', onChange)
+    return () => window.removeEventListener('hashchange', onChange)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">AlgorithmScope</h1>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">버블 정렬</h2>
-          <button className="px-3 py-2 rounded bg-white shadow" onClick={shuffle}>🎲 새 배열</button>
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <a href="#/" className="text-xl font-bold">
+            Algorithm<span className="text-blue-600">Scope</span>
+          </a>
+          <span className="hidden sm:block text-sm text-slate-500">눈으로 배우는 알고리즘·자료구조</span>
         </div>
-        <Visualizer key={seed} algorithm={bubbleSort} input={input} />
-      </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto px-4 py-6">
+        {route ? <AlgorithmPage key={route} id={route} /> : <Home />}
+      </main>
     </div>
   )
 }

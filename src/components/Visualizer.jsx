@@ -21,7 +21,7 @@ const LABELS = {
   dim: '탐색 제외',
 }
 
-const SPEEDS = [0.5, 1, 2, 4]
+const SPEEDS = [0.5, 1, 2, 4, 8]
 
 export default function Visualizer({ algorithm, input }) {
   const steps = useMemo(() => [...algorithm(input)], [algorithm, input])

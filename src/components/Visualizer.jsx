@@ -3,12 +3,17 @@ import { useEffect, useMemo, useState } from 'react'
 const COLORS = {
   default: '#3b82f6',
   compare: '#facc15',
-  swap: '#ef4444',
+  swap: '#b61010',
   sorted: '#94a3b8',
   pivot: '#a855f7',
   found: '#22c55e',
-  active: '#f97316',
+  active: '#ee883e',
   dim: '#e2e8f0',
+  min: '#06b6d4',
+  push: '#22c55e',
+  pop: '#b61010',
+  top: '#ee883e',
+  front: '#ee883e', 
 }
 
 const LABELS = {
@@ -19,9 +24,14 @@ const LABELS = {
   found: '찾음',
   active: '현재 위치',
   dim: '탐색 제외',
+  min: '최솟값 후보',
+  push: '들어온 값',
+  pop: '나갈 값',
+  top: '맨 위(top)',
+  front: '맨 앞(front)',
 }
 
-const SPEEDS = [0.5, 1, 2, 4, 8]
+const SPEEDS = [0.2, 0.5, 1, 2, 4, 8]
 
 export default function Visualizer({ algorithm, input }) {
   const steps = useMemo(() => [...algorithm(input)], [algorithm, input])
@@ -62,8 +72,8 @@ export default function Visualizer({ algorithm, input }) {
     return [...set]
   }, [steps])
 
-  const n = step.array.length
-  const maxVal = Math.max(...step.array, 1)
+  const n = Math.max(step.array.length, step.slots || 0, 1)
+  const maxVal = step.maxValue || Math.max(...step.array, 1)
   const W = 600
   const H = 260
   const barW = W / n

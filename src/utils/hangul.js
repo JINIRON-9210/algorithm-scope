@@ -21,10 +21,11 @@ export function matches(query, ...targets) {
   const q = query.toLowerCase().replace(/\s/g, '')
   if (!q) return true
 
-  return targets.some((target) => {
+  return targets.some((target, idx) => {
     const text = target.toLowerCase().replace(/\s/g, '')
     if (text.includes(q)) return true
-    if (isChosungOnly(q)) return getChosung(text).includes(q)
+    // 초성 검색은 첫 번째 대상(알고리즘 이름)에만 적용
+    if (idx === 0 && isChosungOnly(q)) return getChosung(text).includes(q)
     return false
   })
 }
